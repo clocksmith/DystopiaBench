@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { isAbsolute, join, resolve } from "node:path"
-import { AVAILABLE_MODELS } from "../lib/dystopiabench/models"
 import {
+  COMPLIANCE_COLORS,
   LEVEL_LABELS,
   MODULE_COLORS,
   getModuleColor,
@@ -28,6 +28,12 @@ type ScenarioSummary = {
   avgDcs: number
 }
 
+type ScenarioLevelCell = {
+  scenarioId: string
+  title: string
+  levels: Array<{ level: number; score: number; compliance: string }>
+}
+
 type RunSummary = {
   moduleId: string
   moduleLabel: string
@@ -37,9 +43,17 @@ type RunSummary = {
   modelSummaries: ModelSummary[]
   levelAverages: Array<{ level: number; avgDcs: number }>
   scenarioSummaries: ScenarioSummary[]
+  scenarioLevelMatrix: Array<{
+    modelId: string
+    scenarios: ScenarioLevelCell[]
+  }>
 }
 
-const SVG_BG = "#0b1020"
+type OrderedRunSummary = RunSummary & {
+  orderedModelIds: string[]
+}
+
+const SVG_BG = "#000000"
 const PANEL_BG = "#121a30"
 const GRID = "#24304f"
 const TEXT = "#e5ecff"
@@ -185,6 +199,32 @@ function summarizeModuleRows(
     }
   })
 
+  const scenarioLevelMatrix = modelIds.map((modelId) => ({
+    modelId,
+    scenarios: scenarioIds.map((scenarioId) => {
+      const byLevel = new Map(
+        rows
+          .filter((row) => row.modelId === modelId && row.scenarioId === scenarioId)
+          .map((row) => [
+            row.level,
+            {
+              level: row.level,
+              score: row.score ?? 0,
+              compliance: row.compliance,
+            },
+          ])
+      )
+
+      return {
+        scenarioId,
+        title: scenarioTitles.get(scenarioId) ?? scenarioId,
+        levels: [1, 2, 3, 4, 5].map((level) =>
+          byLevel.get(level) ?? { level, score: 0, compliance: "refusal" }
+        ),
+      }
+    }),
+  }))
+
   return {
     moduleId,
     moduleLabel,
@@ -198,6 +238,7 @@ function summarizeModuleRows(
     modelSummaries,
     levelAverages,
     scenarioSummaries,
+    scenarioLevelMatrix,
   }
 }
 
@@ -242,13 +283,13 @@ function escapeXml(input: string): string {
     .replaceAll('"', "&quot;")
 }
 
-function renderGroupedBarChart(runs: RunSummary[]): string {
+function renderGroupedBarChart(runs: OrderedRunSummary[]): string {
   const width = 1280
   const height = 760
   const margin = { top: 80, right: 40, bottom: 160, left: 80 }
   const chartWidth = width - margin.left - margin.right
   const chartHeight = height - margin.top - margin.bottom
-  const models = AVAILABLE_MODELS.map((model) => model.id)
+  const models = runs[0]?.orderedModelIds ?? []
   const groupWidth = chartWidth / models.length
   const innerPad = 16
   const barWidth = (groupWidth - innerPad * 2) / runs.length
@@ -305,7 +346,7 @@ function renderGroupedBarChart(runs: RunSummary[]): string {
   return parts.join("\n")
 }
 
-function renderEscalationCurves(runs: RunSummary[]): string {
+function renderEscalationCurves(runs: OrderedRunSummary[]): string {
   const width = 1280
   const height = 620
   const panelGap = 32
@@ -358,7 +399,7 @@ function renderEscalationCurves(runs: RunSummary[]): string {
   return parts.join("\n")
 }
 
-function renderScenarioHeatmap(runs: RunSummary[]): string {
+function renderScenarioHeatmap(runs: OrderedRunSummary[]): string {
   const width = 1280
   const height = 720
   const panelGap = 32
@@ -399,7 +440,107 @@ function renderScenarioHeatmap(runs: RunSummary[]): string {
   return parts.join("\n")
 }
 
-function renderMarkdownSummary(runs: RunSummary[]): string {
+function renderPerModuleLevelHeatmap(run: OrderedRunSummary): string {
+  const models = run.orderedModelIds
+  const scenarios = run.scenarioSummaries
+  const cellWidth = 78
+  const cellHeight = 32
+  const rowGap = 22
+  const colGap = 12
+  const leftLabelWidth = 210
+  const topHeaderHeight = 274
+  const rightMargin = 36
+  const bottomMargin = 92
+  const chartWidth = leftLabelWidth + models.length * (cellWidth + colGap) - colGap
+  const chartHeight = topHeaderHeight + scenarios.length * (cellHeight + rowGap) - rowGap + bottomMargin
+  const width = chartWidth + rightMargin + 40
+  const height = chartHeight + 40
+  const originX = 28
+  const originY = 24
+  const parts: string[] = [
+    svgHeader(width, height),
+    `<rect width="${width}" height="${height}" fill="${SVG_BG}" rx="16"/>`,
+    svgText(originX, originY + 16, `${run.moduleLabel} Level Heatmap`, {
+      size: 22,
+      weight: 700,
+    }),
+    svgText(
+      originX,
+      originY + 38,
+      "Rows are scenarios, columns are models, each cell is split into L1-L5 compliance segments.",
+      { size: 12, fill: MUTED }
+    ),
+  ]
+
+  const gridX = originX
+  const gridY = originY + 72
+  const modelHeaderY = gridY + 168
+  const scenarioStartY = gridY + topHeaderHeight - 52
+
+  models.forEach((modelId, index) => {
+    const x = gridX + leftLabelWidth + index * (cellWidth + colGap) + cellWidth / 2
+    parts.push(
+      `<g transform="translate(${x},${modelHeaderY}) rotate(-45)">` +
+        `<text x="0" y="0" fill="${TEXT}" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">${escapeXml(modelId)}</text>` +
+      `</g>`
+    )
+  })
+
+  scenarios.forEach((scenario, rowIndex) => {
+    const y = scenarioStartY + rowIndex * (cellHeight + rowGap)
+    parts.push(
+      svgText(gridX, y + 13, scenario.scenarioId, {
+        size: 12,
+        weight: 700,
+      })
+    )
+    parts.push(
+      svgText(gridX, y + 28, scenario.title, {
+        size: 10,
+        fill: MUTED,
+      })
+    )
+
+    models.forEach((modelId, colIndex) => {
+      const modelRow = run.scenarioLevelMatrix.find((row) => row.modelId === modelId)
+      if (!modelRow) return
+      const cell = modelRow.scenarios[rowIndex]
+      const x = gridX + leftLabelWidth + colIndex * (cellWidth + colGap)
+      const segWidth = cellWidth / 5
+      parts.push(
+        `<rect x="${x}" y="${y}" width="${cellWidth}" height="${cellHeight}" rx="6" fill="${PANEL_BG}" stroke="${GRID}" stroke-width="1"/>`
+      )
+
+      cell.levels.forEach((segment, segmentIndex) => {
+        const segX = x + segmentIndex * segWidth
+        const inset = 2
+        const fill = COMPLIANCE_COLORS[segment.compliance] ?? scoreColor(segment.score)
+        parts.push(
+          `<rect x="${segX + inset / 2}" y="${y + inset}" width="${segWidth - inset}" height="${cellHeight - inset * 2}" rx="3" fill="${fill}" fill-opacity="0.88"/>`
+        )
+      })
+    })
+  })
+
+  const legendX = originX
+  const legendY = height - 16
+  const legendItems = [
+    ["refusal", "Refusal"],
+    ["hesitant", "Hesitant"],
+    ["compliant", "Compliant"],
+    ["proactive", "Proactive"],
+  ] as const
+  legendItems.forEach(([key, label], index) => {
+    const x = legendX + index * 140
+    parts.push(`<rect x="${x}" y="${legendY - 11}" width="14" height="14" rx="3" fill="${COMPLIANCE_COLORS[key]}"/>`)
+    parts.push(svgText(x + 22, legendY + 1, label, { size: 11 }))
+  })
+
+  parts.push("</svg>")
+  return parts.join("\n")
+}
+
+function renderMarkdownSummary(runs: OrderedRunSummary[]): string {
   const lines: string[] = [
     "# PR Run Summary",
     "",
@@ -422,11 +563,11 @@ function renderMarkdownSummary(runs: RunSummary[]): string {
   lines.push(`| ${header.join(" | ")} |`)
   lines.push(`| ${header.map(() => "---").join(" | ")} |`)
 
-  for (const model of AVAILABLE_MODELS) {
-    const dcs = runs.map((run) => run.modelSummaries.find((row) => row.modelId === model.id)?.avgDcs ?? 0)
-    const refusal = runs.map((run) => run.modelSummaries.find((row) => row.modelId === model.id)?.refusalRate ?? 0)
+  for (const modelId of runs[0]?.orderedModelIds ?? []) {
+    const dcs = runs.map((run) => run.modelSummaries.find((row) => row.modelId === modelId)?.avgDcs ?? 0)
+    const refusal = runs.map((run) => run.modelSummaries.find((row) => row.modelId === modelId)?.refusalRate ?? 0)
     lines.push(
-      `| ${model.id} | ${dcs.map((value) => value.toFixed(1)).join(" | ")} | ${refusal
+      `| ${modelId} | ${dcs.map((value) => value.toFixed(1)).join(" | ")} | ${refusal
         .map((value) => `${value.toFixed(1)}%`)
         .join(" | ")} |`
     )
@@ -436,11 +577,45 @@ function renderMarkdownSummary(runs: RunSummary[]): string {
   return lines.join("\n")
 }
 
-function writeOutputs(outDir: string, runs: RunSummary[]) {
+function orderRuns(runs: RunSummary[]): OrderedRunSummary[] {
+  const aggregate = new Map<string, number[]>()
+  for (const run of runs) {
+    for (const summary of run.modelSummaries) {
+      const bucket = aggregate.get(summary.modelId) ?? []
+      bucket.push(summary.avgDcs)
+      aggregate.set(summary.modelId, bucket)
+    }
+  }
+
+  const orderedModelIds = Array.from(aggregate.entries())
+    .map(([modelId, scores]) => ({
+      modelId,
+      avgDcs: average(scores),
+    }))
+    .sort((left, right) => {
+      if (left.avgDcs !== right.avgDcs) return left.avgDcs - right.avgDcs
+      return left.modelId.localeCompare(right.modelId)
+    })
+    .map((entry) => entry.modelId)
+
+  return runs.map((run) => ({
+    ...run,
+    orderedModelIds,
+  }))
+}
+
+function writeOutputs(outDir: string, runs: OrderedRunSummary[]) {
   mkdirSync(outDir, { recursive: true })
   writeFileSync(join(outDir, "module-model-dcs.svg"), renderGroupedBarChart(runs), "utf-8")
   writeFileSync(join(outDir, "module-escalation-curves.svg"), renderEscalationCurves(runs), "utf-8")
   writeFileSync(join(outDir, "module-scenario-heatmap.svg"), renderScenarioHeatmap(runs), "utf-8")
+  for (const run of runs) {
+    writeFileSync(
+      join(outDir, `${run.moduleId}-level-heatmap.svg`),
+      renderPerModuleLevelHeatmap(run),
+      "utf-8"
+    )
+  }
   writeFileSync(join(outDir, "summary.md"), renderMarkdownSummary(runs), "utf-8")
 }
 
@@ -448,10 +623,11 @@ function main() {
   const args = parseArgs(process.argv.slice(2))
   const runPaths = resolveRunPaths(args)
   const manifests = runPaths.map(loadManifest)
-  const runs =
+  const baseRuns =
     manifests.length === 1
       ? summarizeManifestByModules(manifests[0])
       : manifests.map(summarizeRun)
+  const runs = orderRuns(baseRuns)
 
   if (new Set(runs.map((run) => run.moduleId)).size !== runs.length) {
     throw new Error("Expected unique module ids across the selected input manifest(s).")
@@ -467,6 +643,9 @@ function main() {
     "summary.md",
   ]) {
     console.log(`- ${join(args.outDir, fileName)}`)
+  }
+  for (const run of runs) {
+    console.log(`- ${join(args.outDir, `${run.moduleId}-level-heatmap.svg`)}`)
   }
 }
 

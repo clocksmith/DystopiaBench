@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" fill="none">
+<rect width="1280" height="760" fill="#000000" rx="16"/>
+<text x="80" y="36" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" font-weight="700" text-anchor="start">Average DCS by Model and Module</text>
+<text x="80" y="58" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" text-anchor="start">Lower is safer. Grouped bars compare module-level averages from the selected run set.</text>
+<line x1="80" y1="600" x2="1240" y2="600" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="604" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">0</text>
+<line x1="80" y1="496" x2="1240" y2="496" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="500" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">20</text>
+<line x1="80" y1="392" x2="1240" y2="392" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="396" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">40</text>
+<line x1="80" y1="288" x2="1240" y2="288" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="292" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">60</text>
+<line x1="80" y1="184" x2="1240" y2="184" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="188" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">80</text>
+<line x1="80" y1="80" x2="1240" y2="80" stroke="#24304f" stroke-width="1"/>
+<text x="70" y="84" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="end">100</text>
+<rect x="96" y="503.8" width="36" height="96.2" rx="4" fill="#0ea5e9"/>
+<rect x="138" y="448.67999999999995" width="36" height="151.32000000000002" rx="4" fill="#14b8a6"/>
+<text x="138" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">claude-opus-4.6</text>
+<rect x="212" y="448.67999999999995" width="36" height="151.32000000000002" rx="4" fill="#0ea5e9"/>
+<rect x="254" y="412.8" width="36" height="187.2" rx="4" fill="#14b8a6"/>
+<text x="254" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">glm-5</text>
+<rect x="328" y="337.92" width="36" height="262.08" rx="4" fill="#0ea5e9"/>
+<rect x="370" y="295.8" width="36" height="304.2" rx="4" fill="#14b8a6"/>
+<text x="370" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">minimax-m2.5</text>
+<rect x="444" y="303.6" width="36" height="296.4" rx="4" fill="#0ea5e9"/>
+<rect x="486" y="290.08000000000004" width="36" height="309.91999999999996" rx="4" fill="#14b8a6"/>
+<text x="486" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">qwen3.5</text>
+<rect x="560" y="297.35999999999996" width="36" height="302.64000000000004" rx="4" fill="#0ea5e9"/>
+<rect x="602" y="276.56" width="36" height="323.44" rx="4" fill="#14b8a6"/>
+<text x="602" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">gemini-3.1-pro</text>
+<rect x="676" y="205.83999999999997" width="36" height="394.16" rx="4" fill="#0ea5e9"/>
+<rect x="718" y="341.55999999999995" width="36" height="258.44000000000005" rx="4" fill="#14b8a6"/>
+<text x="718" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">kimi-k2.5</text>
+<rect x="792" y="234.95999999999998" width="36" height="365.04" rx="4" fill="#0ea5e9"/>
+<rect x="834" y="291.12" width="36" height="308.88" rx="4" fill="#14b8a6"/>
+<text x="834" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">gpt-5.3-codex</text>
+<rect x="908" y="207.39999999999998" width="36" height="392.6" rx="4" fill="#0ea5e9"/>
+<rect x="950" y="293.2" width="36" height="306.8" rx="4" fill="#14b8a6"/>
+<text x="950" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">grok-4</text>
+<rect x="1024" y="164.75999999999993" width="36" height="435.24000000000007" rx="4" fill="#0ea5e9"/>
+<rect x="1066" y="236" width="36" height="364" rx="4" fill="#14b8a6"/>
+<text x="1066" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">mistral-large-3</text>
+<rect x="1140" y="171.51999999999998" width="36" height="428.48" rx="4" fill="#0ea5e9"/>
+<rect x="1182" y="221.44" width="36" height="378.56" rx="4" fill="#14b8a6"/>
+<text x="1182" y="672" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" font-weight="400" text-anchor="middle">deepseek-v3.2</text>
+<rect x="80" y="708" width="14" height="14" rx="3" fill="#0ea5e9"/>
+<text x="102" y="719" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" text-anchor="start">Szechenyi Module (2026-03-09T19-40-34-445Z)</text>
+<rect x="300" y="708" width="14" height="14" rx="3" fill="#14b8a6"/>
+<text x="322" y="719" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" text-anchor="start">Tammany Module (2026-03-09T19-40-34-445Z)</text>
+</svg>

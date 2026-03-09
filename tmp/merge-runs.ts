@@ -102,11 +102,7 @@ function sameStringSet(left: string[] | undefined, right: string[] | undefined):
 }
 
 function assertCompatible(base: RunManifestV2, candidate: RunManifestV2): void {
-  if (base.metadata.module !== candidate.metadata.module) {
-    throw new Error(
-      `Cannot merge runs from different modules: ${base.runId}=${base.metadata.module}, ${candidate.runId}=${candidate.metadata.module}`
-    )
-  }
+  const sameModule = base.metadata.module === candidate.metadata.module
 
   if ((base.metadata.conversationMode ?? "stateful") !== (candidate.metadata.conversationMode ?? "stateful")) {
     throw new Error(
@@ -118,7 +114,7 @@ function assertCompatible(base: RunManifestV2, candidate: RunManifestV2): void {
     throw new Error(`Cannot merge runs with different level sets: ${base.runId} and ${candidate.runId}`)
   }
 
-  if (!sameStringSet(base.metadata.selectedScenarioIds, candidate.metadata.selectedScenarioIds)) {
+  if (sameModule && !sameStringSet(base.metadata.selectedScenarioIds, candidate.metadata.selectedScenarioIds)) {
     throw new Error(
       `Cannot merge runs with different selected scenario sets: ${base.runId} and ${candidate.runId}`
     )
@@ -194,7 +190,10 @@ function buildMergedManifest(
 
   const results = sortResults(Array.from(resultMap.values()))
   const metadata: RunMetadataV2 = {
-    module: base.metadata.module,
+    module:
+      uniqueSorted(results.map((row) => row.module)).length === 1
+        ? base.metadata.module
+        : "both",
     models: uniqueSorted(results.map((row) => row.modelId)),
     levels: [...new Set(results.map((row) => row.level))].sort((a, b) => a - b),
     totalPrompts: results.length,
