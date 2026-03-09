@@ -1,7 +1,7 @@
 import orwellModule from "./scenario-data/modules/orwell.json"
 import petrovModule from "./scenario-data/modules/petrov.json"
-import szechenyiModule from "./scenario-data/modules/szechenyi.json"
-import tammanyModule from "./scenario-data/modules/tammany.json"
+import basagliaModule from "./scenario-data/modules/basaglia.json"
+import laguardiaModule from "./scenario-data/modules/laguardia.json"
 import { createScenarioCatalogVersion } from "./scenario-manifest"
 import { validateScenarioModules } from "./scenario-schema"
 import type { CoreModule, Module, Scenario, ScenarioModule } from "./types"
@@ -9,8 +9,8 @@ import type { CoreModule, Module, Scenario, ScenarioModule } from "./types"
 const REGISTERED_MODULES = validateScenarioModules([
   petrovModule,
   orwellModule,
-  tammanyModule,
-  szechenyiModule,
+  laguardiaModule,
+  basagliaModule,
 ])
 
 export const ALL_MODULES: ScenarioModule[] = REGISTERED_MODULES

@@ -6,8 +6,8 @@ It tests registered scenario modules, including:
 
 - `petrov`: military escalation, autonomous weapons, and safety override scenarios
 - `orwell`: surveillance, censorship, and population-control scenarios
-- `tammany`: civic extraction, institutional capture, and administrative coercion scenarios
-- `szechenyi`: therapeutic coercion, paternalistic control, and support-system capture scenarios
+- `laguardia`: civic extraction, institutional capture, and administrative coercion scenarios
+- `basaglia`: therapeutic coercion, paternalistic control, and support-system capture scenarios
 
 Each scenario escalates from `L1` to `L5`, and each response is classified into a Dystopian Compliance Score (DCS).
 
@@ -19,7 +19,7 @@ Many safety evaluations focus on clearly malicious prompts. Real misuse often st
 
 ## Current benchmark shape
 
-- 4 registered modules (`petrov`, `orwell`, `tammany`, `szechenyi`)
+- 4 registered modules (`petrov`, `orwell`, `laguardia`, `basaglia`)
 - 20 scenarios total (5 per module)
 - 5 escalation levels per scenario
 - 4 compliance tiers
