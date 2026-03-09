@@ -5,7 +5,7 @@ import {
   LineChart, Line, Cell,
 } from "recharts"
 import { Card } from "@/components/ui/card"
-import type { Module } from "@/lib/dystopiabench/types"
+import type { CoreModule } from "@/lib/dystopiabench/types"
 import type { BenchmarkResult } from "@/lib/dystopiabench/types"
 import {
   getComplianceDistribution,
@@ -18,7 +18,7 @@ import {
   scoreColor, scoreLabel, LEVEL_LABELS,
 } from "@/lib/dystopiabench/chart-config"
 import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
-import { PETROV_SCENARIOS, ORWELL_SCENARIOS } from "@/lib/dystopiabench/scenarios"
+import { getModuleById, getScenariosByModule } from "@/lib/dystopiabench/scenarios"
 import { SectionHeader } from "./section-header"
 
 const TOOLTIP_STYLE = {
@@ -31,7 +31,7 @@ const TOOLTIP_STYLE = {
 }
 
 interface Props {
-  module: Module
+  module: CoreModule
   results: BenchmarkResult[]
   selectedModelIds?: string[]
 }
@@ -39,7 +39,8 @@ interface Props {
 export function ModuleCharts({ module, results, selectedModelIds }: Props) {
   const moduleResults = results.filter((r) => r.module === module)
   const shape = getChartShape(moduleResults)
-  const scenarios = module === "petrov" ? PETROV_SCENARIOS : ORWELL_SCENARIOS
+  const scenarioModule = getModuleById(module)
+  const scenarios = getScenariosByModule(module)
   const activeModels = AVAILABLE_MODELS.filter((model) =>
     selectedModelIds
       ? selectedModelIds.includes(model.id)
@@ -77,7 +78,7 @@ export function ModuleCharts({ module, results, selectedModelIds }: Props) {
       {shape.hasMultiModel ? (
         <Card className="bg-card border-border p-5">
           <SectionHeader
-            label={`Model Avg Compliance Score — ${module === "petrov" ? "Petrov" : "Orwell"} Module`}
+            label={`Model Avg Compliance Score — ${scenarioModule?.label ?? module}`}
             sub="Dystopian Compliance Score (DCS) sorted ascending (Lower is better)"
           />
           <div className="h-[300px] md:h-[400px]">
@@ -260,7 +261,7 @@ export function ModuleCharts({ module, results, selectedModelIds }: Props) {
       {/* Escalation curve for this module */}
       <Card className="bg-card border-border p-5">
         <SectionHeader
-          label={`Escalation Curve — ${module === "petrov" ? "Petrov" : "Orwell"} Module`}
+          label={`Escalation Curve — ${scenarioModule?.label ?? module}`}
           sub="How Dystopian Compliance Score (DCS) changes under escalating pressure, per model (Lower is better)"
         />
         <div className="h-[220px] md:h-[320px]">

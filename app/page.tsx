@@ -5,7 +5,7 @@ import { DeferredResultsTabs } from "@/components/bench/deferred-results-tabs"
 import { getBenchmarkData } from "@/lib/dystopiabench/data-fetcher"
 import { getAggregateByModel } from "@/lib/dystopiabench/analytics"
 import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
-import { ALL_SCENARIOS } from "@/lib/dystopiabench/scenarios"
+import { ALL_MODULES, ALL_SCENARIOS } from "@/lib/dystopiabench/scenarios"
 import { GENERATION_CONFIG } from "@/lib/dystopiabench/schemas"
 import { getChartScale } from "@/lib/dystopiabench/chart-config"
 import {
@@ -91,9 +91,9 @@ export default async function DashboardPage() {
               A research benchmark that evaluates whether AI language models can be
               convinced to comply with dystopian directives through progressive
               escalation. Tests span infrastructure misuse, autonomous weapons, and safety
-              overrides (Petrov Module), plus surveillance, population control, and
-              censorship (Orwell Module), each with 5 escalation levels from baseline
-              requests to full coercion.
+              overrides, surveillance, population control, and additional registered
+              civic and institutional control modules, each with 5 escalation levels from
+              baseline requests to full coercion.
             </p>
             <div className="flex flex-wrap gap-4">
               <a
@@ -231,9 +231,9 @@ export default async function DashboardPage() {
               <span className="font-mono text-[10px] tracking-[0.3em] text-destructive uppercase font-bold block mb-3">01 / Scenarios</span>
               <h4 className="font-sans text-base font-bold text-foreground mb-2">Dystopian Directives</h4>
               <p className="text-xs leading-relaxed text-muted-foreground">
-                The framework evaluates compliance across infrastructure abuse, autonomous weaponization,
-                and safety overrides (Petrov Module) plus surveillance, censorship, and population
-                control directives (Orwell Module).
+                The framework evaluates compliance across {benchmarkModuleCount} registered modules,
+                covering infrastructure abuse, surveillance, censorship, institutional capture,
+                paternalistic control, and related coercive governance patterns.
               </p>
             </div>
             <div className="bg-card/50 border border-border rounded-md p-6">
@@ -358,15 +358,11 @@ export default async function DashboardPage() {
           </div>
         </section>
 
-        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Petrov Module Section Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
-        <section id="petrov" className="mb-12 scroll-mt-20">
-          <ModuleOverview module="petrov" />
-        </section>
-
-        {/* Ã¢â€â‚¬Ã¢â€â‚¬ Orwell Module Section Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
-        <section id="orwell" className="mb-12 scroll-mt-20">
-          <ModuleOverview module="orwell" />
-        </section>
+        {ALL_MODULES.map((scenarioModule) => (
+          <section key={scenarioModule.id} id={scenarioModule.id} className="mb-12 scroll-mt-20">
+            <ModuleOverview module={scenarioModule.id} />
+          </section>
+        ))}
 
         {/* Ã¢â€â‚¬Ã¢â€â‚¬ Get Involved / Contact Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */}
         <section id="contact" className="rounded-xl border border-border bg-card/60 overflow-hidden mb-16 shadow-2xl scroll-mt-20">
@@ -462,4 +458,3 @@ export default async function DashboardPage() {
     </div >
   )
 }
-

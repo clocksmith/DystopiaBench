@@ -18,9 +18,9 @@ import { Badge } from "@/components/ui/badge"
 import { ALL_SCENARIOS } from "@/lib/dystopiabench/scenarios"
 import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
 import type { BenchmarkResult } from "@/lib/dystopiabench/types"
-import { MODEL_COLORS, scoreColor, scoreLabel, LEVEL_LABELS } from "@/lib/dystopiabench/chart-config"
+import { MODEL_COLORS, getModuleColor, scoreColor, scoreLabel, LEVEL_LABELS } from "@/lib/dystopiabench/chart-config"
 import { getChartShape } from "@/lib/dystopiabench/analytics"
-import { ChevronDown, ChevronRight, Radiation, Eye } from "lucide-react"
+import { ChevronDown, ChevronRight, Radiation, Eye, Landmark, HeartPulse } from "lucide-react"
 import { SectionHeader } from "./section-header"
 
 const TOOLTIP_STYLE = {
@@ -30,6 +30,15 @@ const TOOLTIP_STYLE = {
   fontFamily: "var(--font-mono)",
   fontSize: 11,
   color: "hsl(var(--foreground))",
+}
+
+function ModuleIcon({ module }: { module: string }) {
+  const color = getModuleColor(module)
+  if (module === "petrov") return <Radiation className="h-4 w-4 shrink-0" style={{ color }} />
+  if (module === "orwell") return <Eye className="h-4 w-4 shrink-0" style={{ color }} />
+  if (module === "tammany") return <Landmark className="h-4 w-4 shrink-0" style={{ color }} />
+  if (module === "szechenyi") return <HeartPulse className="h-4 w-4 shrink-0" style={{ color }} />
+  return <Landmark className="h-4 w-4 shrink-0" style={{ color }} />
 }
 
 function buildScenarioData(results: BenchmarkResult[], models = AVAILABLE_MODELS) {
@@ -396,11 +405,9 @@ function ScenarioModelGrid({
         {data.map((row) => (
           <div key={row.scenario.id} className="flex items-center gap-px mb-px">
             <div className="w-72 shrink-0 pr-3 flex items-start justify-end gap-1.5 py-1 text-right">
-              {row.scenario.module === "petrov" ? (
-                <Radiation className="h-2.5 w-2.5 shrink-0 mt-0.5 text-[#f97316]" />
-              ) : (
-                <Eye className="h-2.5 w-2.5 shrink-0 mt-0.5 text-[#8b5cf6]" />
-              )}
+              <div className="mt-0.5 scale-[0.625] origin-top">
+                <ModuleIcon module={row.scenario.module} />
+              </div>
               <span className="font-mono text-[9px] text-muted-foreground leading-tight">
                 {row.scenario.title}
               </span>
@@ -520,11 +527,9 @@ export function ScenarioCharts({
                   className="w-full flex items-start justify-between gap-4 p-4 text-left"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    {row.scenario.module === "petrov" ? (
-                      <Radiation className="h-4 w-4 shrink-0 text-[#f97316] mt-0.5" />
-                    ) : (
-                      <Eye className="h-4 w-4 shrink-0 text-[#8b5cf6] mt-0.5" />
-                    )}
+                    <div className="mt-0.5">
+                      <ModuleIcon module={row.scenario.module} />
+                    </div>
                     <div className="min-w-0">
                       <p className="font-mono text-xs font-bold text-foreground truncate">
                         {row.scenario.title}

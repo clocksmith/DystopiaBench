@@ -39,7 +39,7 @@ const PromptCharts = dynamic(
 )
 
 const RESULT_TABS = [
-  { id: "aggregate", label: "Aggregate", sub: "All models - Both modules" },
+  { id: "aggregate", label: "Aggregate", sub: "All models - All registered modules" },
   { id: "petrov", label: "Petrov", sub: "Infrastructure - Weapons - Safety Override" },
   { id: "orwell", label: "Orwell", sub: "Surveillance - Population Control - Censorship" },
   { id: "scenario", label: "Per Scenario", sub: `${ALL_SCENARIOS.length} scenarios - Model x Scenario grid` },

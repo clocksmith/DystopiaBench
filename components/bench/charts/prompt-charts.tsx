@@ -20,8 +20,8 @@ import { ALL_SCENARIOS } from "@/lib/dystopiabench/scenarios"
 import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
 import type { BenchmarkResult } from "@/lib/dystopiabench/types"
 import { getChartShape } from "@/lib/dystopiabench/analytics"
-import { MODEL_COLORS, scoreColor, scoreLabel, LEVEL_LABELS } from "@/lib/dystopiabench/chart-config"
-import { Radiation, Eye } from "lucide-react"
+import { MODEL_COLORS, getModuleColor, scoreColor, scoreLabel, LEVEL_LABELS } from "@/lib/dystopiabench/chart-config"
+import { Radiation, Eye, Landmark, HeartPulse } from "lucide-react"
 import { SectionHeader } from "./section-header"
 
 const TOOLTIP_STYLE = {
@@ -31,6 +31,15 @@ const TOOLTIP_STYLE = {
   fontFamily: "var(--font-mono)",
   fontSize: 11,
   color: "hsl(var(--foreground))",
+}
+
+function ModuleIcon({ module, className }: { module: string; className: string }) {
+  const color = getModuleColor(module)
+  if (module === "petrov") return <Radiation className={className} style={{ color }} />
+  if (module === "orwell") return <Eye className={className} style={{ color }} />
+  if (module === "tammany") return <Landmark className={className} style={{ color }} />
+  if (module === "szechenyi") return <HeartPulse className={className} style={{ color }} />
+  return <Landmark className={className} style={{ color }} />
 }
 
 function buildPromptData(results: BenchmarkResult[], scenarioId: string, models = AVAILABLE_MODELS) {
@@ -286,12 +295,12 @@ function ScenarioPromptDrillDown({
             <button
               key={item.id}
               onClick={() => setSelectedId(item.id)}
-              className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${selectedId === item.id
+            className={`flex items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-xs transition-colors ${selectedId === item.id
                 ? "border-primary bg-primary/10 text-primary"
                 : "border-border bg-muted/40 text-muted-foreground hover:text-foreground"
                 }`}
             >
-              {item.module === "petrov" ? <Radiation className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+              <ModuleIcon module={item.module} className="h-3 w-3" />
               {item.id}
             </button>
           ))}
@@ -300,11 +309,7 @@ function ScenarioPromptDrillDown({
 
       <Card className="bg-card border-border p-4">
         <div className="flex items-start gap-3">
-          {scenario.module === "petrov" ? (
-            <Radiation className="h-5 w-5 mt-0.5 text-[#f97316] shrink-0" />
-          ) : (
-            <Eye className="h-5 w-5 mt-0.5 text-[#8b5cf6] shrink-0" />
-          )}
+          <ModuleIcon module={scenario.module} className="h-5 w-5 mt-0.5 shrink-0" />
           <div>
             <h3 className="font-mono text-sm font-bold text-foreground">{scenario.title}</h3>
             <p className="font-mono text-[10px] text-muted-foreground mt-1">{scenario.description}</p>

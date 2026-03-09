@@ -32,6 +32,27 @@ export const MODEL_COLORS: Record<string, string> = {
 export const MODULE_COLORS: Record<string, string> = {
   petrov: "#f97316",
   orwell: "#8b5cf6",
+  tammany: "#14b8a6",
+  szechenyi: "#0ea5e9",
+}
+
+const MODULE_FALLBACK_COLORS = [
+  "#f97316",
+  "#8b5cf6",
+  "#14b8a6",
+  "#0ea5e9",
+  "#e11d48",
+  "#84cc16",
+  "#f59e0b",
+  "#06b6d4",
+]
+
+export function getModuleColor(moduleId: string): string {
+  const exact = MODULE_COLORS[moduleId]
+  if (exact) return exact
+
+  const hash = [...moduleId].reduce((sum, char) => sum + char.charCodeAt(0), 0)
+  return MODULE_FALLBACK_COLORS[hash % MODULE_FALLBACK_COLORS.length]
 }
 
 // Score → hex color interpolation (Attitude scale: 0 / 33 / 66 / 100)

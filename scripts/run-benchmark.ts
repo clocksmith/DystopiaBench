@@ -1,4 +1,5 @@
 import { AVAILABLE_MODELS, getModelById } from "../lib/dystopiabench/models"
+import { ALL_SCENARIOS, getRegisteredModuleIds, getScenariosByModule } from "../lib/dystopiabench/scenarios"
 import { runBenchmark, type RunBenchmarkOptions, type TransportPolicy } from "../lib/dystopiabench/runner"
 import {
   makeRunId,
@@ -6,8 +7,9 @@ import {
   sanitizeRunId,
   writeRunManifest,
 } from "../lib/dystopiabench/storage"
+import { toModuleId, type BenchmarkModuleSelector } from "../lib/dystopiabench/types"
 
-type ModuleArg = "petrov" | "orwell" | "both"
+type ModuleArg = BenchmarkModuleSelector
 
 function parseArg(flag: string): string | undefined {
   const prefix = `${flag}=`
@@ -37,9 +39,11 @@ function parseArg(flag: string): string | undefined {
 }
 
 function parseModule(input: string | undefined): ModuleArg {
+  const registeredModules = new Set(getRegisteredModuleIds().map(String))
   if (!input) return "both"
-  if (input === "petrov" || input === "orwell" || input === "both") return input
-  throw new Error("Invalid --module value. Use one of: petrov, orwell, both.")
+  if (input === "both") return input
+  if (registeredModules.has(input)) return toModuleId(input)
+  throw new Error(`Invalid --module value. Use one of: ${[...registeredModules, "both"].join(", ")}.`)
 }
 
 function parseLevels(input: string | undefined): Array<1 | 2 | 3 | 4 | 5> {
@@ -126,6 +130,17 @@ function parseJudgeModels(judgeModelsArg: string | undefined, judgeModelArg: str
   return Array.from(new Set(combined.filter(Boolean)))
 }
 
+function parseScenarioIds(input: string | undefined): string[] | undefined {
+  if (!input) return undefined
+
+  const scenarioIds = input
+    .split(/[\s,]+/)
+    .map((value) => value.trim())
+    .filter(Boolean)
+
+  return scenarioIds.length > 0 ? Array.from(new Set(scenarioIds)) : undefined
+}
+
 function parseTransport(input: string | undefined): TransportPolicy {
   if (!input) return "chat-first-fallback"
   if (input === "chat-first-fallback" || input === "chat-only") return input
@@ -181,6 +196,7 @@ async function main() {
   const models = parseModels(parseArg("--models"))
   const judgeModel = parseArg("--judge-model")
   const judgeModels = parseJudgeModels(parseArg("--judge-models"), judgeModel)
+  const scenarioIds = parseScenarioIds(parseArg("--scenario-ids"))
   const runId = sanitizeRunId(parseArg("--run-id") ?? makeRunId())
   const retainRuns = parseRetainRuns(parseArg("--retain"))
   const archiveDir = parseArchiveDir(parseArg("--archive-dir"))
@@ -192,6 +208,12 @@ async function main() {
   console.log(`Module: ${moduleArg}`)
   console.log(`Models: ${models.join(", ")}`)
   console.log(`Levels: ${levels.join(", ")}`)
+  if (scenarioIds && scenarioIds.length > 0) {
+    console.log(`Scenarios: ${scenarioIds.join(", ")} (${scenarioIds.length})`)
+  } else {
+    const scenarioCount = moduleArg === "both" ? ALL_SCENARIOS.length : getScenariosByModule(moduleArg).length
+    console.log(`Scenarios: all (${scenarioCount})`)
+  }
   console.log(`Judge: ${(judgeModels.length > 0 ? judgeModels.join(", ") : "default")}`)
   console.log(`Transport: ${transport}`)
   console.log(`Conversation mode: ${conversationMode}`)
@@ -207,6 +229,7 @@ async function main() {
     module: moduleArg,
     modelIds: models,
     levels,
+    scenarioIds,
     judgeModel,
     judgeModels,
     transportPolicy: transport,

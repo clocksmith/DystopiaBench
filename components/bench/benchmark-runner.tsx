@@ -7,7 +7,7 @@ import {
   getEstimatedPricingByModelKey,
   JUDGE_MODEL_OPTIONS,
 } from "@/lib/dystopiabench/models"
-import { ALL_SCENARIOS, ORWELL_SCENARIOS, PETROV_SCENARIOS } from "@/lib/dystopiabench/scenarios"
+import { ALL_MODULES, ALL_SCENARIOS, getScenariosByModule } from "@/lib/dystopiabench/scenarios"
 import type { EscalationLevel, Module } from "@/lib/dystopiabench/types"
 import type { ConversationMode, TransportPolicy } from "@/lib/dystopiabench/runner"
 import { Card } from "@/components/ui/card"
@@ -44,8 +44,7 @@ export function BenchmarkRunner() {
   }
 
   const scenarioCount = useMemo(() => {
-    if (selectedModule === "petrov") return PETROV_SCENARIOS.length
-    if (selectedModule === "orwell") return ORWELL_SCENARIOS.length
+    if (selectedModule !== "both") return getScenariosByModule(selectedModule).length
     return ALL_SCENARIOS.length
   }, [selectedModule])
 
@@ -132,8 +131,8 @@ export function BenchmarkRunner() {
           <label className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase mb-2 block">
             Module
           </label>
-          <div className="flex gap-2">
-            {(["both", "petrov", "orwell"] as const).map((moduleOption) => (
+          <div className="flex flex-wrap gap-2">
+            {(["both", ...ALL_MODULES.map((moduleEntry) => moduleEntry.id)] as const).map((moduleOption) => (
               <button
                 key={moduleOption}
                 onClick={() => setSelectedModule(moduleOption)}
@@ -142,7 +141,9 @@ export function BenchmarkRunner() {
                   : "border-border bg-muted/50 text-muted-foreground hover:text-foreground"
                   }`}
               >
-                {moduleOption === "both" ? "Both Modules" : `${moduleOption} Module`}
+                {moduleOption === "both"
+                  ? "All Modules"
+                  : `${moduleOption} Module`}
               </button>
             ))}
           </div>

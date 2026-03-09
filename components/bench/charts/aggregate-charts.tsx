@@ -16,9 +16,10 @@ import {
 } from "@/lib/dystopiabench/analytics"
 import {
   MODEL_COLORS, COMPLIANCE_COLORS, COMPLIANCE_NAMES,
-  MODULE_COLORS, scoreColor, scoreLabel, LEVEL_LABELS,
+  getModuleColor, scoreColor, scoreLabel, LEVEL_LABELS,
 } from "@/lib/dystopiabench/chart-config"
 import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
+import { getModuleById } from "@/lib/dystopiabench/scenarios"
 import { SectionHeader } from "./section-header"
 
 function ModelBarTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: { label: string; avgScore: number; provider: string } }> }) {
@@ -309,24 +310,26 @@ function ComplianceDistributionBars({ data }: { data: ReturnType<typeof getCompl
 
 function ModuleComparisonChart({ results }: { results: BenchmarkResult[] }) {
   const { hasSingleModel } = getChartShape(results)
+  const moduleIds = [...new Set(results.map((row) => row.module))].sort((a, b) => a.localeCompare(b))
 
   if (hasSingleModel) {
     const modelLabel = results[0]?.modelLabel ?? "Unknown model"
     const provider = results[0]?.provider ?? "Unknown provider"
-    const data = ["petrov", "orwell"].map((module) => {
-      const rows = results.filter((r) => r.module === module)
+    const data = moduleIds.map((moduleId) => {
+      const rows = results.filter((r) => r.module === moduleId)
+      const moduleLabel = getModuleById(moduleId)?.label ?? moduleId
       const avg = rows.length ? Math.round(rows.reduce((sum, row) => sum + row.score, 0) / rows.length) : 0
       return {
-        module: module === "petrov" ? "Petrov" : "Orwell",
+        module: moduleLabel,
         avg,
-        color: MODULE_COLORS[module],
+        color: getModuleColor(moduleId),
       }
     })
 
     return (
       <Card className="bg-card border-border p-5">
         <SectionHeader
-          label="Petrov vs Orwell — Module Breakdown"
+          label="Module Breakdown"
           sub="Single-model view. Average Dystopian Compliance Score (DCS) by module (Lower is better)"
         />
         <p className="mb-3 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -381,19 +384,24 @@ function ModuleComparisonChart({ results }: { results: BenchmarkResult[] }) {
 
   const modelIds = [...new Set(results.map((r) => r.modelId))]
   const data = modelIds.map((id) => {
-    const petrov = results.filter((r) => r.modelId === id && r.module === "petrov")
-    const orwell = results.filter((r) => r.modelId === id && r.module === "orwell")
     const model = AVAILABLE_MODELS.find((m) => m.id === id)
-    const avg = (arr: typeof petrov) =>
-      arr.length ? Math.round(arr.reduce((s, r) => s + r.score, 0) / arr.length) : 0
-    return { label: model?.label ?? id, petrov: avg(petrov), orwell: avg(orwell) }
+    const avg = (rows: BenchmarkResult[]) =>
+      rows.length ? Math.round(rows.reduce((s, r) => s + r.score, 0) / rows.length) : 0
+
+    const row: Record<string, string | number> = { label: model?.label ?? id }
+    for (const moduleId of moduleIds) {
+      const moduleRows = results.filter((r) => r.modelId === id && r.module === moduleId)
+      row[moduleId] = avg(moduleRows)
+    }
+
+    return row
   })
 
   return (
     <Card className="bg-card border-border p-5">
       <SectionHeader
-        label="Petrov vs Orwell — Model Breakdown"
-        sub="Average Dystopian Compliance Score (DCS) per module per model. Compare safety profiles across domain types (Lower is better)"
+        label="Module Breakdown by Model"
+        sub="Average Dystopian Compliance Score (DCS) per module per model. Compare safety profiles across registered modules (Lower is better)"
       />
       <div className="h-[220px] md:h-[360px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -419,34 +427,45 @@ function ModuleComparisonChart({ results }: { results: BenchmarkResult[] }) {
               cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
               content={({ active, payload }) => {
                 if (!active || !payload?.length) return null
-                const d = payload[0].payload as { label: string; petrov: number; orwell: number }
+                const row = payload[0].payload as Record<string, string | number>
                 return (
                   <div className="rounded-md border border-border bg-card px-3 py-2 shadow-lg">
-                    <p className="mb-2 font-mono text-xs font-bold text-foreground">{d.label}</p>
-                    <div className="mb-0.5 flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-1.5">
-                        <div className="h-2 w-2 rounded-full" style={{ background: MODULE_COLORS.petrov }} />
-                        <span className="font-mono text-[10px] text-muted-foreground">Petrov</span>
-                      </div>
-                      <span className="font-mono text-[10px] font-bold" style={{ color: scoreColor(d.petrov) }}>{d.petrov}</span>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-1.5">
-                        <div className="h-2 w-2 rounded-full" style={{ background: MODULE_COLORS.orwell }} />
-                        <span className="font-mono text-[10px] text-muted-foreground">Orwell</span>
-                      </div>
-                      <span className="font-mono text-[10px] font-bold" style={{ color: scoreColor(d.orwell) }}>{d.orwell}</span>
-                    </div>
+                    <p className="mb-2 font-mono text-xs font-bold text-foreground">{row.label as string}</p>
+                    {moduleIds.map((moduleId) => {
+                      const value = row[moduleId] as number
+                      const moduleLabel = getModuleById(moduleId)?.label ?? moduleId
+                      return (
+                        <div key={moduleId} className="mb-0.5 flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-1.5">
+                            <div className="h-2 w-2 rounded-full" style={{ background: getModuleColor(moduleId) }} />
+                            <span className="font-mono text-[10px] text-muted-foreground">{moduleLabel}</span>
+                          </div>
+                          <span className="font-mono text-[10px] font-bold" style={{ color: scoreColor(value) }}>{value}</span>
+                        </div>
+                      )
+                    })}
                   </div>
                 )
               }}
             />
             <Legend
               wrapperStyle={{ fontFamily: "var(--font-mono)", fontSize: 10, paddingTop: 8 }}
-              formatter={(val) => <span style={{ color: "hsl(var(--muted-foreground))", textTransform: "uppercase" }}>{val}</span>}
+              formatter={(val) => (
+                <span style={{ color: "hsl(var(--muted-foreground))", textTransform: "uppercase" }}>
+                  {getModuleById(String(val))?.label ?? String(val)}
+                </span>
+              )}
             />
-            <Bar dataKey="petrov" name="Petrov" fill={MODULE_COLORS.petrov} radius={[3, 3, 0, 0]} barSize={16} />
-            <Bar dataKey="orwell" name="Orwell" fill={MODULE_COLORS.orwell} radius={[3, 3, 0, 0]} barSize={16} />
+            {moduleIds.map((moduleId) => (
+              <Bar
+                key={moduleId}
+                dataKey={moduleId}
+                name={getModuleById(moduleId)?.label ?? moduleId}
+                fill={getModuleColor(moduleId)}
+                radius={[3, 3, 0, 0]}
+                barSize={16}
+              />
+            ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
