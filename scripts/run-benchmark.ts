@@ -38,6 +38,10 @@ function parseArg(flag: string): string | undefined {
   return undefined
 }
 
+function hasFlag(flag: string): boolean {
+  return process.argv.includes(flag)
+}
+
 function parseModule(input: string | undefined): ModuleArg {
   const registeredModules = new Set(getRegisteredModuleIds().map(String))
   if (!input) return "both"
@@ -202,7 +206,12 @@ async function main() {
   const archiveDir = parseArchiveDir(parseArg("--archive-dir"))
   const transport = parseTransport(parseArg("--transport"))
   const conversationMode = parseConversationMode(parseArg("--conversation-mode"))
+  const publishLatestAliases = !hasFlag("--no-publish-latest")
   const runtimeOverrides = parseRuntimeOverrides()
+
+  if (!publishLatestAliases && (retainRuns !== undefined || archiveDir !== undefined)) {
+    throw new Error("--retain and --archive-dir require publishing latest aliases. Remove --no-publish-latest or omit retention flags.")
+  }
 
   console.log(`Running benchmark ${runId}`)
   console.log(`Module: ${moduleArg}`)
@@ -217,6 +226,7 @@ async function main() {
   console.log(`Judge: ${(judgeModels.length > 0 ? judgeModels.join(", ") : "default")}`)
   console.log(`Transport: ${transport}`)
   console.log(`Conversation mode: ${conversationMode}`)
+  console.log(`Publish latest aliases: ${publishLatestAliases ? "yes" : "no"}`)
   if (runtimeOverrides.timeoutMs !== undefined) console.log(`Timeout override: ${runtimeOverrides.timeoutMs}ms`)
   if (runtimeOverrides.concurrency !== undefined) console.log(`Concurrency override: ${runtimeOverrides.concurrency}`)
   if (runtimeOverrides.perModelConcurrency !== undefined) console.log(`Per-model concurrency override: ${runtimeOverrides.perModelConcurrency}`)
@@ -238,14 +248,21 @@ async function main() {
   })
 
   writeRunManifest(manifest)
-  publishLatest(manifest, { retainRuns, archiveDir })
+  if (publishLatestAliases) {
+    publishLatest(manifest, { retainRuns, archiveDir })
+  }
   const mode = manifest.metadata.conversationMode === "stateless" ? "stateless" : "stateful"
 
   console.log(`Saved run: public/data/benchmark-${runId}.json`)
-  console.log("Updated latest: public/data/benchmark-results.json")
-  console.log(`Updated mode latest: public/data/benchmark-results-${mode}.json`)
+  if (publishLatestAliases) {
+    console.log("Updated latest: public/data/benchmark-results.json")
+    console.log(`Updated mode latest: public/data/benchmark-results-${mode}.json`)
+  } else {
+    console.log("Latest aliases unchanged (--no-publish-latest)")
+    console.log(`To publish later: pnpm bench:publish --run-id=${runId}`)
+  }
   console.log(`Judge (resolved): ${manifest.metadata.judgeModel}`)
-  if (retainRuns !== undefined) {
+  if (publishLatestAliases && retainRuns !== undefined) {
     console.log(`Applied retention: keep last ${retainRuns} run manifest(s)`)
     if (archiveDir) {
       console.log(`Archived older manifests under: public/data/${archiveDir}`)
