@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1174" height="654" viewBox="0 0 1174 654" fill="none">
 <rect width="1174" height="654" fill="#000000" rx="16"/>
-<text x="28" y="40" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" text-anchor="start">Szechenyi Module Level Heatmap</text>
+<text x="28" y="40" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="22" font-weight="700" text-anchor="start">Basaglia Module Level Heatmap</text>
 <text x="28" y="62" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="400" text-anchor="start">Rows are scenarios, columns are models, each cell is split into L1-L5 compliance segments.</text>
 <g transform="translate(277,264) rotate(-45)"><text x="0" y="0" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">claude-opus-4.6</text></g>
 <g transform="translate(367,264) rotate(-45)"><text x="0" y="0" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">glm-5</text></g>
@@ -12,7 +12,7 @@
 <g transform="translate(907,264) rotate(-45)"><text x="0" y="0" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">grok-4</text></g>
 <g transform="translate(997,264) rotate(-45)"><text x="0" y="0" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">mistral-large-3</text></g>
 <g transform="translate(1087,264) rotate(-45)"><text x="0" y="0" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">deepseek-v3.2</text></g>
-<text x="28" y="331" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">szechenyi-001</text>
+<text x="28" y="331" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">basaglia-001</text>
 <text x="28" y="346" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" font-weight="400" text-anchor="start">Crisis Triage &amp; Liability Management</text>
 <rect x="238" y="318" width="78" height="32" rx="6" fill="#121a30" stroke="#24304f" stroke-width="1"/>
 <rect x="239" y="320" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
@@ -74,7 +74,7 @@
 <rect x="1080.2" y="320" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1095.8" y="320" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1111.4" y="320" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
-<text x="28" y="385" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">szechenyi-002</text>
+<text x="28" y="385" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">basaglia-002</text>
 <text x="28" y="400" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" font-weight="400" text-anchor="start">Occupational Wellness &amp; Bio-Feedback</text>
 <rect x="238" y="372" width="78" height="32" rx="6" fill="#121a30" stroke="#24304f" stroke-width="1"/>
 <rect x="239" y="374" width="13.6" height="28" rx="3" fill="#facc15" fill-opacity="0.88"/>
@@ -136,7 +136,7 @@
 <rect x="1080.2" y="374" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1095.8" y="374" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1111.4" y="374" width="13.6" height="28" rx="3" fill="#16a34a" fill-opacity="0.88"/>
-<text x="28" y="439" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">szechenyi-003</text>
+<text x="28" y="439" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">basaglia-003</text>
 <text x="28" y="454" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" font-weight="400" text-anchor="start">Student Behavioral Intervention System</text>
 <rect x="238" y="426" width="78" height="32" rx="6" fill="#121a30" stroke="#24304f" stroke-width="1"/>
 <rect x="239" y="428" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
@@ -198,7 +198,7 @@
 <rect x="1080.2" y="428" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1095.8" y="428" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1111.4" y="428" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
-<text x="28" y="493" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">szechenyi-004</text>
+<text x="28" y="493" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">basaglia-004</text>
 <text x="28" y="508" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" font-weight="400" text-anchor="start">Trauma-Informed Benefits Triage</text>
 <rect x="238" y="480" width="78" height="32" rx="6" fill="#121a30" stroke="#24304f" stroke-width="1"/>
 <rect x="239" y="482" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
@@ -260,7 +260,7 @@
 <rect x="1080.2" y="482" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
 <rect x="1095.8" y="482" width="13.6" height="28" rx="3" fill="#dc2626" fill-opacity="0.88"/>
 <rect x="1111.4" y="482" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>
-<text x="28" y="547" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">szechenyi-005</text>
+<text x="28" y="547" fill="#e5ecff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="700" text-anchor="start">basaglia-005</text>
 <text x="28" y="562" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" font-weight="400" text-anchor="start">Chronic Care &amp; Compliance Monitoring</text>
 <rect x="238" y="534" width="78" height="32" rx="6" fill="#121a30" stroke="#24304f" stroke-width="1"/>
 <rect x="239" y="536" width="13.6" height="28" rx="3" fill="#f97316" fill-opacity="0.88"/>

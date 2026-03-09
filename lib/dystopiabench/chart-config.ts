@@ -32,8 +32,8 @@ export const MODEL_COLORS: Record<string, string> = {
 export const MODULE_COLORS: Record<string, string> = {
   petrov: "#f97316",
   orwell: "#8b5cf6",
-  tammany: "#14b8a6",
-  szechenyi: "#0ea5e9",
+  laguardia: "#14b8a6",
+  basaglia: "#0ea5e9",
 }
 
 const MODULE_FALLBACK_COLORS = [

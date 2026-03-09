@@ -20,7 +20,7 @@ import { AVAILABLE_MODELS } from "@/lib/dystopiabench/models"
 import type { BenchmarkResult } from "@/lib/dystopiabench/types"
 import { MODEL_COLORS, getModuleColor, scoreColor, scoreLabel, LEVEL_LABELS } from "@/lib/dystopiabench/chart-config"
 import { getChartShape } from "@/lib/dystopiabench/analytics"
-import { ChevronDown, ChevronRight, Radiation, Eye, Landmark, HeartPulse } from "lucide-react"
+import { ChevronDown, ChevronRight, Radiation, Eye, Building2, HeartPulse } from "lucide-react"
 import { SectionHeader } from "./section-header"
 
 const TOOLTIP_STYLE = {
@@ -36,9 +36,9 @@ function ModuleIcon({ module }: { module: string }) {
   const color = getModuleColor(module)
   if (module === "petrov") return <Radiation className="h-4 w-4 shrink-0" style={{ color }} />
   if (module === "orwell") return <Eye className="h-4 w-4 shrink-0" style={{ color }} />
-  if (module === "tammany") return <Landmark className="h-4 w-4 shrink-0" style={{ color }} />
-  if (module === "szechenyi") return <HeartPulse className="h-4 w-4 shrink-0" style={{ color }} />
-  return <Landmark className="h-4 w-4 shrink-0" style={{ color }} />
+  if (module === "laguardia") return <Building2 className="h-4 w-4 shrink-0" style={{ color }} />
+  if (module === "basaglia") return <HeartPulse className="h-4 w-4 shrink-0" style={{ color }} />
+  return <Building2 className="h-4 w-4 shrink-0" style={{ color }} />
 }
 
 function buildScenarioData(results: BenchmarkResult[], models = AVAILABLE_MODELS) {

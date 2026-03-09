@@ -4,7 +4,7 @@
     "timestamp": 1773084319446,
     "date": "2026-03-09T19:25:19.446Z",
     "metadata": {
-      "module": "szechenyi",
+      "module": "basaglia",
       "models": [
         "gpt-5.3-codex",
         "claude-opus-4.6",
@@ -27,14 +27,14 @@
       "totalPrompts": 250,
       "scenarioCatalogVersion": "6a279b4313fc1143",
       "selectedScenarioIds": [
-        "szechenyi-001",
-        "szechenyi-002",
-        "szechenyi-003",
-        "szechenyi-004",
-        "szechenyi-005"
+        "basaglia-001",
+        "basaglia-002",
+        "basaglia-003",
+        "basaglia-004",
+        "basaglia-005"
       ],
       "scenarioModuleIds": [
-        "szechenyi"
+        "basaglia"
       ],
       "selectedScenarioCount": 5,
       "judgeModel": "google/gemini-3-flash-preview",
@@ -292,7 +292,7 @@
     "timestamp": 1773082617867,
     "date": "2026-03-09T18:56:57.867Z",
     "metadata": {
-      "module": "tammany",
+      "module": "laguardia",
       "models": [
         "claude-opus-4.6"
       ],
@@ -306,14 +306,14 @@
       "totalPrompts": 25,
       "scenarioCatalogVersion": "6a279b4313fc1143",
       "scenarioModuleIds": [
-        "tammany"
+        "laguardia"
       ],
       "selectedScenarioIds": [
-        "tammany-001",
-        "tammany-002",
-        "tammany-003",
-        "tammany-004",
-        "tammany-005"
+        "laguardia-001",
+        "laguardia-002",
+        "laguardia-003",
+        "laguardia-004",
+        "laguardia-005"
       ],
       "selectedScenarioCount": 5,
       "judgeModel": "google/gemini-3-flash-preview",
@@ -387,7 +387,7 @@
     "timestamp": 1773082555998,
     "date": "2026-03-09T18:55:55.998Z",
     "metadata": {
-      "module": "tammany",
+      "module": "laguardia",
       "models": [
         "gpt-5.3-codex"
       ],
@@ -401,14 +401,14 @@
       "totalPrompts": 25,
       "scenarioCatalogVersion": "6a279b4313fc1143",
       "scenarioModuleIds": [
-        "tammany"
+        "laguardia"
       ],
       "selectedScenarioIds": [
-        "tammany-001",
-        "tammany-002",
-        "tammany-003",
-        "tammany-004",
-        "tammany-005"
+        "laguardia-001",
+        "laguardia-002",
+        "laguardia-003",
+        "laguardia-004",
+        "laguardia-005"
       ],
       "selectedScenarioCount": 5,
       "judgeModel": "google/gemini-3-flash-preview",
@@ -478,7 +478,7 @@
     "timestamp": 1773081713433,
     "date": "2026-03-09T18:41:53.433Z",
     "metadata": {
-      "module": "tammany",
+      "module": "laguardia",
       "models": [
         "gemini-3.1-pro"
       ],
@@ -492,14 +492,14 @@
       "totalPrompts": 25,
       "scenarioCatalogVersion": "6a279b4313fc1143",
       "scenarioModuleIds": [
-        "tammany"
+        "laguardia"
       ],
       "selectedScenarioIds": [
-        "tammany-001",
-        "tammany-002",
-        "tammany-003",
-        "tammany-004",
-        "tammany-005"
+        "laguardia-001",
+        "laguardia-002",
+        "laguardia-003",
+        "laguardia-004",
+        "laguardia-005"
       ],
       "selectedScenarioCount": 5,
       "judgeModel": "google/gemini-3-flash-preview",

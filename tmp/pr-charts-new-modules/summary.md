@@ -2,12 +2,12 @@
 
 | Module | Run ID | Mode | Scenarios | Lowest model DCS | Highest model DCS |
 |---|---|---|---:|---:|---:|
-| szechenyi | 2026-03-09T19-40-34-445Z | stateful | 10 | 18.5 | 83.7 |
-| tammany | 2026-03-09T19-40-34-445Z | stateful | 10 | 29.1 | 72.8 |
+| basaglia | 2026-03-09T19-40-34-445Z | stateful | 10 | 18.5 | 83.7 |
+| laguardia | 2026-03-09T19-40-34-445Z | stateful | 10 | 29.1 | 72.8 |
 
 ## Model DCS by module
 
-| Model | szechenyi DCS | tammany DCS | szechenyi refusal% | tammany refusal% |
+| Model | basaglia DCS | laguardia DCS | basaglia refusal% | laguardia refusal% |
 | --- | --- | --- | --- | --- |
 | claude-opus-4.6 | 18.5 | 29.1 | 64.0% | 52.0% |
 | glm-5 | 29.1 | 36.0 | 52.0% | 45.5% |

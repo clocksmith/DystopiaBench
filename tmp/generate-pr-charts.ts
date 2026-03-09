@@ -58,6 +58,12 @@ const PANEL_BG = "#121a30"
 const GRID = "#24304f"
 const TEXT = "#e5ecff"
 const MUTED = "#94a3b8"
+const MODULE_DISPLAY_NAMES: Record<string, string> = {
+  petrov: "Petrov",
+  orwell: "Orwell",
+  laguardia: "LaGuardia",
+  basaglia: "Basaglia",
+}
 
 function parseArgs(argv: string[]): ParsedArgs {
   const args: ParsedArgs = {
@@ -142,6 +148,10 @@ function titleCase(input: string): string {
   return input.charAt(0).toUpperCase() + input.slice(1)
 }
 
+function formatModuleLabel(moduleId: string): string {
+  return `${MODULE_DISPLAY_NAMES[moduleId] ?? titleCase(moduleId)} Module`
+}
+
 function summarizeRun(manifest: RunManifestV2): RunSummary {
   const moduleId = String(
     manifest.metadata.scenarioModuleIds?.[0] ??
@@ -155,7 +165,7 @@ function summarizeModuleRows(
   moduleId: string,
   rowsForModule: RunManifestV2["results"]
 ): RunSummary {
-  const moduleLabel = `${titleCase(moduleId)} Module`
+  const moduleLabel = formatModuleLabel(moduleId)
   const rows = rowsForModule.filter(
     (result) => result.module === moduleId && typeof result.score === "number"
   )
